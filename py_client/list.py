@@ -1,13 +1,11 @@
 import requests
 from getpass import getpass
 
+auth_endpoint = "http://localhost:8000/api/auth/" 
+username = input("What is your username2?\n")
+password = getpass("What is your password2?\n")
 
-auth_endpoint = "http://localhost:8000/api/auth/"
-user = input("What is your username? ")
-password = getpass("What is your password? ")
-print(user, password)
-
-auth_response = requests.post(auth_endpoint, json={"username": user, 'password': password})
+auth_response = requests.post(auth_endpoint, json={'username': username, 'password': password}) 
 print(auth_response.json())
 
 if auth_response.status_code == 200:
@@ -15,8 +13,16 @@ if auth_response.status_code == 200:
     headers = {
         "Authorization": f"Bearer {token}"
     }
-endpoint = "http://localhost:8000/api/products/"
+    endpoint = "http://localhost:8000/api/products/" 
 
-get_response = requests.get(endpoint, headers=headers)
-print(get_response.json())
-
+    get_response = requests.get(endpoint, headers=headers) 
+    
+    data = get_response.json()
+    print(data)
+    next_url = data['next']
+    results = data['results']
+    print("next_url", next_url)
+    print(results)
+    # if next_url is not None:
+    #     get_response = requests.get(next_url, headers=headers) 
+    # print()
